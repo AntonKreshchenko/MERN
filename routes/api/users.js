@@ -17,20 +17,20 @@ const user = require('../../models/User');
 // @desc    Tests users route
 // @access  Public
 
-router.get('/test', (req, res) => res.json({ msg: 'Users Works' }));
+router.get('/test', (req, res) => res.json({msg: 'Users Works'}));
 
 // @route   GET api/users/register
 // @desc    Register user
 // @access  Public
 router.post('/register', (req, res) => {
-    const { errors, isValid } = validateRegisterInput(req.body);
+    const {errors, isValid} = validateRegisterInput(req.body);
 
     // Check Validation
     if (!isValid) {
         return res.status(400).json(errors);
     }
 
-    User.findOne({ email: req.body.email }).then(user => {
+    User.findOne({email: req.body.email}).then(user => {
         if (user) {
             errors.email = 'Email alredy exists';
             return res.status(400).json(errors.email);
@@ -66,7 +66,7 @@ router.post('/register', (req, res) => {
 // @desc    Login User / Returning JWT Token
 // @access  Public
 router.post('/login', (req, res) => {
-    const { errors, isValid } = validateLoginInput(req.body);
+    const {errors, isValid} = validateLoginInput(req.body);
 
     // Check Validation
     if (!isValid) {
@@ -77,7 +77,7 @@ router.post('/login', (req, res) => {
     const password = req.body.password;
 
     // Find user by email
-    User.findOne({ email }).then(user => {
+    User.findOne({email}).then(user => {
         // Check for user
         if (!user) {
             errors.email = 'User not found';
@@ -98,7 +98,7 @@ router.post('/login', (req, res) => {
                 jwt.sign(
                     payload,
                     keys.secretOrKey,
-                    { expiresIn: 3600 },
+                    {expiresIn: 3600},
                     (err, token) => {
                         res.json({
                             success: true,
@@ -119,7 +119,7 @@ router.post('/login', (req, res) => {
 // @access  Private
 router.get(
     '/current',
-    passport.authenticate('jwt', { session: false }),
+    passport.authenticate('jwt', {session: false}),
     (req, res) => {
         res.json({
             id: req.user.id,
